@@ -3,7 +3,6 @@ package com.example.demoSul.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Date;
 
 @Data
