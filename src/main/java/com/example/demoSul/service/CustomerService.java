@@ -1,30 +1,39 @@
-package com.example.demoSul.service;
+package com.example.demoSul.model;
 
-import com.example.demoSul.model.Customer;
-import com.example.demoSul.repository.CustomerRepository;
-import org.springframework.stereotype.Service;
-import java.util.List;
+public interface CustomerService {
 
-@Service
-public class CustomerService {
+    /**
+     * Создает нового клиента
+     * @param client - клиент для создания
+     */
+    void create(Client client);
 
-    private final CustomerRepository customerRepository;
+    /**
+     * Возвращает список всех имеющихся клиентов
+     * @return список клиентов
+     */
+    List<client> readAll();
 
-    public CustomerService(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }
+    /**
+     * Возвращает клиента по его ID
+     * @param id - ID клиента
+     * @return - объект клиента с заданным ID
+     */
+    Client read(int id);
 
-    public Customer findById(Long idCustomer){
-        return customerRepository.getOne(idCustomer);
-    }
-    public List<Customer> findAll(){
-        return customerRepository.findAll();
-    }
+    /**
+     * Обновляет клиента с заданным ID,
+     * в соответствии с переданным клиентом
+     * @param client - клиент в соответсвии с которым нужно обновить данные
+     * @param id - id клиента которого нужно обновить
+     * @return - true если данные были обновлены, иначе false
+     */
+    boolean update(Client client, int id);
 
-    public Customer saveCustomer(Customer customer){
-       return customerRepository.save(customer);
-    }
-    public void deleteById(Long idCustomer){
-        customerRepository.deleteById(idCustomer);
-    }
+    /**
+     * Удаляет клиента с заданным ID
+     * @param id - id клиента, которого нужно удалить
+     * @return - true если клиент был удален, иначе false
+     */
+    boolean delete(int id);
 }
