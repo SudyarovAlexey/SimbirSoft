@@ -39,39 +39,3 @@ databaseChangeLog:
                   type: varchar(200)
                   constraints:
                     nullable: true
-  - changeSet:
-      id: 2
-      author: postgres
-      changes:
-        - createTable:
-            tableName: favorites
-            columns:
-              - column:
-                  name: id_customer
-                  type: bigint
-                  constraints:
-                    nullable: false
-              - column:
-                  name: id_part_number
-                  type: bigint
-                  constraints:
-                    nullable: false
-  - changeSet:
-      id: addForeignKeyConstraint-id_customer
-      author: postgres
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: id_customer
-            baseTableCatalogName: tables
-            baseTableName: favorites
-            baseTableSchemaName: public
-            constraintName: id_customer
-            deferrable: true
-            initiallyDeferred: true
-            onDelete: CASCADE
-            onUpdate: RESTRICT
-            referencedColumnNames: id_customer
-            referencedTableCatalogName: tables
-            referencedTableName: customer
-            referencedTableSchemaName: public
-            validate: true

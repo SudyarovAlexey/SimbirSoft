@@ -1,55 +1,82 @@
 package com.example.demoSul.controller;
 
+
+import com.example.demoSul.dto.CustomerDTO;
 import com.example.demoSul.model.Customer;
 import com.example.demoSul.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("customers") //api/v1/customers/
 public class CustomerController {
 
-    private final CustomerService customerService;
-
     @Autowired
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
+    private CustomerService customerService;
+
+    @RequestMapping (value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_PROBLEM_JSON_UTF8_VALUE)
+    public ResponseEntity<List<Customer>> readAll() {
+        List<Customer> customers = this.customerService.readAll();
+
+        if (customers.isEmpty()) {
+            return new ResponseEntity<List<Customer>>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<List<Customer>>(customers, HttpStatus.OK);
+    }
+    @RequestMapping(value = "/{idCustomer}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<CustomerDTO> readById(@PathVariable(name = "idCustomer") Long customerId) {
+//    public ResponseEntity<Customer> readById(@PathVariable Long customerId) {
+        if (customerId == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        CustomerDTO customerDTO = this.customerService.readById(customerId);
+
+        if (customerDTO == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(customerDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/customers")
-    public String findAll(Model model){
-        List<Customer> customers = customerService.findAll();
-        model.addAttribute("customers", customers);
-        return "customer-list";
+    @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Customer> create(@RequestBody @Validated Customer customer) {
+        HttpHeaders headers = new HttpHeaders();
+
+        if (customer == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        this.customerService.create(customer);
+        return new ResponseEntity<>(customer, headers, HttpStatus.CREATED);
     }
-    @GetMapping("/customer-create")
-    public String createCustomerForm (Customer customer){
-        return "customer-create";
+
+    @RequestMapping(value = "", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Customer> update(@RequestBody @Validated Customer customer, UriComponentsBuilder builder) {
+        HttpHeaders headers = new HttpHeaders();
+
+        if (customer == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        this.customerService.create(customer);
+        return new ResponseEntity<>(customer, headers, HttpStatus.OK);
     }
-    @PostMapping("/customer-create")
-    public String createCustomer(Customer customer){
-        customerService.saveCustomer(customer);
-        return "redirect:/customers";
-    }
-    @GetMapping("/customer-delete/{idCustomer}")
-    public String deleteCustomer (@PathVariable("idCustomer") Long idCustomer) {
-        customerService.deleteById(idCustomer);
-        return "redirect:/customers";
-    }
-    @GetMapping("/customer-update/{idCustomer}")
-    public String updateCustomerForm(@PathVariable("idCustomer") Long idCustomer, Model model){
-        Customer customer = customerService.findById(idCustomer);
-        model.addAttribute("customer", customer);
-        return "customer-update";
-    }
-    @PostMapping("/customer-update")
-    public String updateCustomer (Customer customer){
-        customerService.saveCustomer(customer);
-        return "redirect:/customers";
+
+    @RequestMapping(value = "/{idCustomer}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<CustomerDTO> delete(@PathVariable(name = "idCustomer") Long customerId) {
+        CustomerDTO customerDTO = this.customerService.readById(customerId);
+        if (customerDTO == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        this.customerService.delete(customerId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
