@@ -5,13 +5,10 @@ import com.example.demoSul.mappers.CustomerMapper;
 import com.example.demoSul.model.Customer;
 import com.example.demoSul.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-//@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService{
@@ -21,12 +18,10 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public CustomerDTO readById(Long idCustomer) {
-//        log.info("IN CustomerServiceImpl readById {}", idCustomer);
-        return customerMapper.toDTO(customerRepository.findById(idCustomer).get());
+        return customerMapper.toDTO(customerRepository.findById(idCustomer).orElse(null));
     }
     @Override
     public List<Customer> readAll(){
-//        log.info("IN CustomerServiceImpl readAll");
         return customerRepository.findAll();
     }
     @Override
@@ -42,16 +37,3 @@ public class CustomerServiceImpl implements CustomerService{
         customerRepository.deleteById(idCustomer);
     }
 }
-
-//@Service
-//public class CustomerService {
-//
-//    private final CustomerRepository customerRepository;
-//
-//    public CustomerService(CustomerRepository customerRepository){
-//        this.customerRepository = customerRepository;
-//    }
-//
-//    public Customer findById(Long idCustomer){
-//        return customerRepository.getOne(idCustomer);
-//}
