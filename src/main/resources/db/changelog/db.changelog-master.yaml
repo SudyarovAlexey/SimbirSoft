@@ -39,3 +39,52 @@ databaseChangeLog:
                   type: varchar(200)
                   constraints:
                     nullable: true
+  - changeSet:
+      id: 2
+      author: postgres
+      changes:
+        - createTable:
+            tableName: warehouse
+            columns:
+              - column:
+                  name: id_part_number
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: category
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(300)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: size
+                  type: varchar(5)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: bigint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: quantity
+                  type: bigint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: id_delivery_note
+                  type: bigint
+                  constraints:
+                    foreignKey: true
+                    nullable: false
