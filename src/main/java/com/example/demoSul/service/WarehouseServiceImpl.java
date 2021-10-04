@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class WarehouseServiceImpl implements WarehouseService{
+public class WarehouseServiceImpl implements WarehouseService {
 
     private final WarehouseRepository warehouseRepository;
     private final WarehouseMapper warehouseMapper;
@@ -24,20 +24,24 @@ public class WarehouseServiceImpl implements WarehouseService{
     public WarehouseDTO readById(Long idPartNumber) {
         return warehouseMapper.toDTO(warehouseRepository.findById(idPartNumber).orElse(null));
     }
+
     @Override
-    public List<Warehouse> readAll(){
+    public List<Warehouse> readAll() {
         return warehouseRepository.findAll();
     }
+
     @Override
-    public void create(Warehouse warehouse){
+    public void create(Warehouse warehouse) {
         warehouseRepository.save(warehouse);
     }
+
     @Override
-    public void update(Warehouse warehouse, Long idPartNumber){
+    public void update(Warehouse warehouse, Long idPartNumber) {
         warehouseRepository.save(warehouse);
     }
+
     @Override
-    public void delete(Long idPartNumber){
+    public void delete(Long idPartNumber) {
         warehouseRepository.deleteById(idPartNumber);
     }
 }

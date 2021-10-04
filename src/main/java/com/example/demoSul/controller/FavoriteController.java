@@ -1,9 +1,10 @@
 package com.example.demoSul.controller;
 
 import com.example.demoSul.dto.CustomerDTO;
+import com.example.demoSul.dto.FavoriteDTO;
 import com.example.demoSul.model.Customer;
-import com.example.demoSul.service.CustomerService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demoSul.model.Favorite;
+import com.example.demoSul.service.FavoriteService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,71 +14,71 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/customers")
-public class CustomerController {
+@RequestMapping("/favorite")
+public class FavoriteController {
 
-    private final CustomerService customerService;
+    private final FavoriteService favoriteService;
 
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
+    public FavoriteController(FavoriteService favoriteService) {
+        this.favoriteService = favoriteService;
     }
 
     @GetMapping
     public Map<String, Object> readAll() {
-        List<Customer> customers = customerService.readAll();
+        List<Favorite> favorites = favoriteService.readAll();
         Map<String, Object> response = new HashMap<>();
-        if(customers.isEmpty()) {
+        if(favorites.isEmpty()) {
             response = Collections.singletonMap("result", "not found");
         }
         response.put("result", "ok");
-        response.put("data", customers);
+        response.put("data", favorites);
         return response;
     }
 
     @GetMapping("/{idCustomer}")
     public Map<String, Object> readById(@PathVariable("idCustomer") Long customerId) {
             Map<String,Object> response = new HashMap<>();
-        CustomerDTO customerDTO = customerService.readById(customerId);
-        if (customerDTO == null) {
+        FavoriteDTO favoriteDTO = favoriteService.readById(customerId);
+        if (favoriteDTO == null) {
             response = Collections.singletonMap("result", "not found");
             return response;
         }
         response.put("result", "ok");
-        response.put("data", customerDTO);
+        response.put("data", favoriteDTO);
         return response;
     }
 
     @PostMapping
-    public Map<String, Object> create(@RequestBody @Validated Customer customer) {
-        if (customer.getNameCustomer() == null) {
+    public Map<String, Object> create(@RequestBody @Validated Favorite favorite) {
+        if (favorite.getIdCustomer() == null) {
             return Collections.singletonMap("result", "customer not created");
         }
-        customerService.create(customer);
+        favoriteService.create(favorite);
         Map<String, Object> response = new HashMap<>();
         response.put ("result", "ok");
-        response.put("data", customer);
+        response.put("data", favorite);
         return response;
     }
 
     @PutMapping
-    public Map<String, Object> update(@RequestBody @Validated Customer customer) {
-        if (customerService.readById(customer.getIdCustomer()) == null) {
+    public Map<String, Object> update(@RequestBody @Validated Favorite favorite) {
+        if (favoriteService.readById(favorite.getIdCustomer()) == null) {
             return Collections.singletonMap("result", "customer not exist");
         }
-        customerService.update(customer, customer.getIdCustomer());
+        favoriteService.update(favorite, favorite.getIdCustomer());
         Map<String, Object> response = new HashMap<>();
         response.put("result", "ok");
-        response.put("data", customer);
+        response.put("data", favorite);
         return response;
     }
 
     @DeleteMapping("/{idCustomer}")
     public Map<String, Object> delete (@PathVariable ("idCustomer") Long customerId) {
-        CustomerDTO customerDTO = customerService.readById(customerId);
-        if (customerDTO == null) {
+        FavoriteDTO favoriteDTO = favoriteService.readById(customerId);
+        if (favoriteDTO == null) {
             return Collections.singletonMap("result", "not found");
         }
-        customerService.delete(customerId);
+        favoriteService.delete(customerId);
         return Collections.singletonMap("result", "ok");
     }
 }

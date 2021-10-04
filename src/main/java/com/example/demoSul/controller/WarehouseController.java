@@ -13,11 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("warehouse")
+@RequestMapping("/warehouse")
 public class WarehouseController {
 
-    @Autowired
-    private WarehouseService warehouseService;
+    private final WarehouseService warehouseService;
+
+    public WarehouseController(WarehouseService warehouseService) {
+        this.warehouseService = warehouseService;
+    }
 
     @GetMapping
     public Map<String, Object> readAll() {
@@ -32,7 +35,7 @@ public class WarehouseController {
     }
 
     @GetMapping("/{idProduct}")
-    public Map<String, Object> readById(@PathVariable(name = "idProduct") Long productId) {
+    public Map<String, Object> readById(@PathVariable("idProduct") Long productId) {
             Map<String,Object> response = new HashMap<>();
         WarehouseDTO warehouseDTO = warehouseService.readById(productId);
         if (warehouseDTO == null) {
@@ -69,7 +72,7 @@ public class WarehouseController {
     }
 
     @DeleteMapping("/{idProduct}")
-    public Map<String, Object> delete (@PathVariable (name = "idProduct") Long productId) {
+    public Map<String, Object> delete (@PathVariable ("idProduct") Long productId) {
         WarehouseDTO warehouseDTO = warehouseService.readById(productId);
         if (warehouseDTO == null) {
             return Collections.singletonMap("result", "not found");

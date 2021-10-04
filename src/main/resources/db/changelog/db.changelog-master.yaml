@@ -88,3 +88,22 @@ databaseChangeLog:
                   constraints:
                     foreignKey: true
                     nullable: false
+  - changeSet:
+      id: 3
+      author: postgres
+      changes:
+        - createTable:
+            tableName: favorite
+            columns:
+              - column:
+                  name: id_customer
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    update: false
+              - column:
+                  name: id_part_number
+                  type: bigint
+                  constraints:
+                    nullable: false

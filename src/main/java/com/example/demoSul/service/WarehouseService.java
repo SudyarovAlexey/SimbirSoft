@@ -9,19 +9,19 @@ import java.util.List;
 
 public interface WarehouseService {
     /**
-     * Создает нового клиента
-     * @param warehouse - заказ для создания
+     * Создает новый товар
+     * @param warehouse - создание товара
      */
     void create(Warehouse warehouse);
 
     /**
-     * Возвращает список всех имеющихся клиентов
+     * Возвращает список всех имеющихся товаров
      * @return список товаров
      */
     List<Warehouse> readAll();
 
     /**
-     * Возвращает клиента по его ID
+     * Возвращает товар по его ID
      * @param idPartNumber - ID товара
      * @return - объект товара с заданным ID
      */
@@ -30,8 +30,8 @@ public interface WarehouseService {
     /**
      * Обновляет товар с заданным ID,
      * в соответствии с переданным товаром
-     * @param warehouse - клиент в соответсвии с которым нужно обновить данные
-     * @param idPartNumber - id клиента которого нужно обновить
+     * @param warehouse - товар в соответсвии с которым нужно обновить данные
+     * @param idPartNumber - id товара, который нужно обновить
      * @return - true если данные были обновлены, иначе false
      */
     void update(Warehouse warehouse, Long idPartNumber);

@@ -3,7 +3,7 @@ package com.example.demoSul.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Set;
 
 @Data
 @Entity
@@ -33,4 +33,7 @@ public class Warehouse {
 
     @Column (name = "id_delivery_note")
     private Long idDeliveryNote;
+
+    @OneToMany (mappedBy = "warehouse", fetch = FetchType.LAZY)
+    private Set<Favorite> favorite;
 }
