@@ -3,13 +3,11 @@ package com.example.demoSul.controller;
 import com.example.demoSul.dto.CustomerDTO;
 import com.example.demoSul.model.Customer;
 import com.example.demoSul.service.CustomerService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Min;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/customers")
-@Tag(name="Пользователи", description="Управление составом пользователей")
+@Api("Контроллер для работы с покупателями")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -26,12 +24,12 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    @ApiOperation("Получание списка всех покупателей")
     @GetMapping
-    @Operation(summary = "Все покупатели", description = "Получение полного списка покупателей")
     public Map<String, Object> readAll() {
         List<Customer> customers = customerService.readAll();
         Map<String, Object> response = new HashMap<>();
-        if(customers.isEmpty()) {
+        if (customers.isEmpty()) {
             response = Collections.singletonMap("result", "not found");
         }
         response.put("result", "ok");
@@ -39,10 +37,10 @@ public class CustomerController {
         return response;
     }
 
+    @ApiOperation("Получение данных о покупателе по id")
     @GetMapping("/{idCustomer}")
-    @Operation(summary = "Данные одного покупателя", description = "Получение данных одного покупателя по id")
-    public Map<String, Object> readById(@PathVariable @RequestPart("idCustomer") @Min(0) @Parameter(description = "Указать id покупателя") Long customerId) {
-            Map<String,Object> response = new HashMap<>();
+    public Map<String, Object> readById(@PathVariable("idCustomer") Long customerId) {
+        Map<String, Object> response = new HashMap<>();
         CustomerDTO customerDTO = customerService.readById(customerId);
         if (customerDTO == null) {
             response = Collections.singletonMap("result", "not found");
@@ -53,21 +51,21 @@ public class CustomerController {
         return response;
     }
 
+    @ApiOperation("Внесение данных о новом покупателе")
     @PostMapping
-    @Operation(summary = "Ввод данных покупателя", description = "Ввод данных нового покупателя")
     public Map<String, Object> create(@RequestBody @Validated Customer customer) {
         if (customer.getNameCustomer() == null) {
             return Collections.singletonMap("result", "customer not created");
         }
         customerService.create(customer);
         Map<String, Object> response = new HashMap<>();
-        response.put ("result", "ok");
+        response.put("result", "ok");
         response.put("data", customer);
         return response;
     }
 
+    @ApiOperation("Обновление данных о покупателе")
     @PutMapping
-    @Operation(summary = "Обновление данных покупателя", description = "Обновление данных существующего покупателя по id")
     public Map<String, Object> update(@RequestBody @Validated Customer customer) {
         if (customerService.readById(customer.getIdCustomer()) == null) {
             return Collections.singletonMap("result", "customer not exist");
@@ -79,9 +77,9 @@ public class CustomerController {
         return response;
     }
 
+    @ApiOperation("Удаление данных о покупателе")
     @DeleteMapping("/{idCustomer}")
-    @Operation(summary = "Удаление покупателя", description = "Удаление данных покупателя по id")
-    public Map<String, Object> delete (@PathVariable @RequestPart("idCustomer") @Min(0) @Parameter(description = "Указать id покупателя") Long customerId) {
+    public Map<String, Object> delete(@PathVariable("idCustomer") Long customerId) {
         CustomerDTO customerDTO = customerService.readById(customerId);
         if (customerDTO == null) {
             return Collections.singletonMap("result", "not found");

@@ -14,7 +14,6 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-                    unique: true
               - column:
                   name: name_customer
                   type: varchar(100)
@@ -53,7 +52,6 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-                    unique: true
               - column:
                   name: category
                   type: varchar(20)
@@ -98,24 +96,36 @@ databaseChangeLog:
             tableName: favorite
             columns:
               - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    unique: true
+              - column:
                   name: id_customer
                   type: bigint
+                  constraints:
+                    nullable: true
               - column:
                   name: id_part_number
                   type: bigint
+                  constraints:
+                    nullable: true
   - changeSet:
       id: 4
       author: postgres
       changes:
         - addForeignKeyConstraint:
-            baseTableName: customer
+            baseTableName: favorite
             baseColumnNames: id_customer
-            referencedTableName: favorite
+            referencedTableName: customer
             referencedColumnNames: id_customer
-            constraintName: customer_favorite_fk
+            constraintName: fk_customer_favorite
         - addForeignKeyConstraint:
-            baseTableName: warehouse
+            baseTableName: favorite
             baseColumnNames: id_part_number
-            referencedTableName: favorite
+            referencedTableName: warehouse
             referencedColumnNames: id_part_number
-            constraintName: warehouse_favorite_fk
+            constraintName: fk_warehouse_favorite

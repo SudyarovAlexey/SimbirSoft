@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerServiceImpl implements CustomerService{
+public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
@@ -20,20 +20,24 @@ public class CustomerServiceImpl implements CustomerService{
     public CustomerDTO readById(Long idCustomer) {
         return customerMapper.toDTO(customerRepository.findById(idCustomer).orElse(null));
     }
+
     @Override
-    public List<Customer> readAll(){
+    public List<Customer> readAll() {
         return customerRepository.findAll();
     }
+
     @Override
-    public void create(Customer customer){
+    public void create(Customer customer) {
         customerRepository.save(customer);
     }
+
     @Override
-    public void update(Customer customer, Long idCustomer){
+    public void update(Customer customer, Long idCustomer) {
         customerRepository.save(customer);
     }
+
     @Override
-    public void delete(Long idCustomer){
+    public void delete(Long idCustomer) {
         customerRepository.deleteById(idCustomer);
     }
 }

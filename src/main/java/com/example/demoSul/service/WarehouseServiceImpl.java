@@ -1,12 +1,8 @@
 package com.example.demoSul.service;
 
-import com.example.demoSul.dto.CustomerDTO;
 import com.example.demoSul.dto.WarehouseDTO;
-import com.example.demoSul.mappers.CustomerMapper;
 import com.example.demoSul.mappers.WarehouseMapper;
-import com.example.demoSul.model.Customer;
 import com.example.demoSul.model.Warehouse;
-import com.example.demoSul.repository.CustomerRepository;
 import com.example.demoSul.repository.WarehouseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

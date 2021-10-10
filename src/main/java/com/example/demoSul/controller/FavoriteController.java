@@ -3,8 +3,8 @@ package com.example.demoSul.controller;
 import com.example.demoSul.dto.FavoriteDTO;
 import com.example.demoSul.model.Favorite;
 import com.example.demoSul.service.FavoriteService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/favorite")
-@Tag(name="Избранное", description="Управление списками избранных товаров")
+@Api("Контроллер для работы с избранными товарами")
 public class FavoriteController {
 
     private final FavoriteService favoriteService;
@@ -24,12 +24,12 @@ public class FavoriteController {
         this.favoriteService = favoriteService;
     }
 
+    @ApiOperation("Получение всех списков избранных товаров")
     @GetMapping
-    @Operation(summary = "Все списки избранного", description = "Получение полного перечня покупателей и их избранных товаров")
     public Map<String, Object> readAll() {
         List<Favorite> favorites = favoriteService.readAll();
         Map<String, Object> response = new HashMap<>();
-        if(favorites.isEmpty()) {
+        if (favorites.isEmpty()) {
             response = Collections.singletonMap("result", "not found");
         }
         response.put("result", "ok");
@@ -37,10 +37,10 @@ public class FavoriteController {
         return response;
     }
 
+    @ApiOperation("Получение списка избранных товаров по id покупателя")
     @GetMapping("/{idCustomer}")
-    @Operation(summary = "Списко избранного покупателя", description = "Получение списка избранного одного по id покупателя")
     public Map<String, Object> readById(@PathVariable("idCustomer") Long customerId) {
-            Map<String,Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         FavoriteDTO favoriteDTO = favoriteService.readById(customerId);
         if (favoriteDTO == null) {
             response = Collections.singletonMap("result", "not found");
@@ -51,21 +51,21 @@ public class FavoriteController {
         return response;
     }
 
+    @ApiOperation("Создание списка избранных товаров")
     @PostMapping
-    @Operation(summary = "Создание списка избранных товаров", description = "Создание взаимосвязи покупатель - избранный товар")
     public Map<String, Object> create(@RequestBody @Validated Favorite favorite) {
         if (favorite.getIdCustomer() == null) {
             return Collections.singletonMap("result", "customer not created");
         }
         favoriteService.create(favorite);
         Map<String, Object> response = new HashMap<>();
-        response.put ("result", "ok");
+        response.put("result", "ok");
         response.put("data", favorite);
         return response;
     }
 
+    @ApiOperation("Обновление данных об избранных товаров")
     @PutMapping
-    @Operation(summary = "Обновление списка избранных товаров", description = "Обновление списка избранных товаров по id покупателя")
     public Map<String, Object> update(@RequestBody @Validated Favorite favorite) {
         if (favoriteService.readById(favorite.getIdCustomer()) == null) {
             return Collections.singletonMap("result", "customer not exist");
@@ -77,9 +77,9 @@ public class FavoriteController {
         return response;
     }
 
-    @Operation(summary = "Удаление списка избранных товаров", description = "Удаление списка избранных товаров по id покупателя")
+    @ApiOperation("Удаление списка избранных товаро покупателя")
     @DeleteMapping("/{idCustomer}")
-    public Map<String, Object> delete (@PathVariable ("idCustomer") Long customerId) {
+    public Map<String, Object> delete(@PathVariable("idCustomer") Long customerId) {
         FavoriteDTO favoriteDTO = favoriteService.readById(customerId);
         if (favoriteDTO == null) {
             return Collections.singletonMap("result", "not found");
