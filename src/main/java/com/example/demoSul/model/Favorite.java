@@ -1,6 +1,6 @@
 package com.example.demoSul.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,25 +9,24 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table (name = "favorite")
-@Schema(description = "Сущность избранное")
+@Table(name = "favorite")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Favorite {
     @Id
-    @Column (name = "id_customer")
-    @Schema(description = "Внешний ключ - id покупателя")
+    @Column(name = "id_customer")
+    @ApiModelProperty("id покупателя - внешний ключ")
     private Long idCustomer;
 
-    @Column (name = "id_part_number", insertable = false, updatable = false)
-    @Schema(description = "Внешний ключ - id товара")
+    @Column(name = "id_part_number")
+    @ApiModelProperty("Артикул товара - внешний ключ")
     private Long idPartNumber;
 
-    @ManyToOne
-    @JoinColumn(name="customer", insertable = false, updatable = false, referencedColumnName = "id_customer")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_customer", insertable = false, updatable = false)
     private Customer customer;
 
-    @ManyToOne
-    @JoinColumn(name="warehouse", referencedColumnName = "id_part_number")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_part_number", insertable = false, updatable = false)
     private Warehouse warehouse;
 }
